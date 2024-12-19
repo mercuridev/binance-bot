@@ -1,0 +1,6 @@
+{
+    "api_key": "SUA_API_KEY_DA_BINANCE_AQUI",
+    "api_secret": "SUA_API_SECRET_DA_BINANCE_AQUI",
+    "test_mode": true,
+    "default_currency": "BRL"
+}
