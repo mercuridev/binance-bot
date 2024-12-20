@@ -25,19 +25,22 @@ def log_trade(action, symbol, quantity, price, balance):
         df = pd.DataFrame(columns=columns)
         df.to_csv(log_file, index=False)
 
+    # Load existing data
+    try:
+        df = pd.read_csv(log_file)
+    except pd.errors.EmptyDataError:
+        df = pd.DataFrame(columns=columns)
+
     # Append trade to log
-    df = pd.read_csv(log_file)
-    df = pd.concat([
-        df,
-        pd.DataFrame({
-            'action': [action],
-            'symbol': [symbol],
-            'quantity': [quantity],
-            'price': [price],
-            'balance': [balance],
-            'timestamp': [pd.Timestamp.now()]
-        })
-    ])
+    new_entry = pd.DataFrame({
+        'action': [action],
+        'symbol': [symbol],
+        'quantity': [quantity],
+        'price': [price],
+        'balance': [balance],
+        'timestamp': [pd.Timestamp.now()]
+    })
+    df = pd.concat([df, new_entry], ignore_index=True)
     df.to_csv(log_file, index=False)
 
 def generate_report():
@@ -50,6 +53,11 @@ def generate_report():
         return
 
     df = pd.read_csv(log_file)
+
+    # Handle empty or all-NA datasets
+    if df.empty or df.isna().all().all():
+        print("No valid data in the trading log to generate a report.")
+        return
 
     # Summary statistics
     total_trades = len(df)
@@ -75,8 +83,12 @@ def generate_report():
     plt.ylabel('Balance')
     plt.legend()
     plt.grid()
-    plt.savefig('logs/reports/balance_chart.png')
+    plt.tight_layout()
+    balance_chart_path = 'logs/reports/balance_chart.png'
+    plt.savefig(balance_chart_path)
     plt.show()
+
+    print(f"Balance chart saved at: {balance_chart_path}")
 
 # Example usage
 if __name__ == "__main__":

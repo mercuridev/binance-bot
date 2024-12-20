@@ -1,14 +1,13 @@
 {
-    "strategy": "MACD",  
-    "interval": "1h",   
-    "data_limit": 100,  
-    "fast_period": 12,  
-    "slow_period": 26,  
-    "signal_period": 9, 
-    "rsi_period": 14,   
-    "rsi_overbought": 70,
-    "rsi_oversold": 30,  
-    "symbols": ["BTCUSDT", "ETHUSDT"], 
-    "order_size": 0.01  
-  }
-  
+  "strategy": "MACD",
+  "interval": "1h",
+  "data_limit": 100,
+  "fast_period": 12,
+  "slow_period": 26,
+  "signal_period": 9,
+  "rsi_period": 14,
+  "rsi_overbought": 70,
+  "rsi_oversold": 30,
+  "symbols": ["BTCUSDT", "ETHUSDT", "BNBUSDT"], 
+  "order_size": 0.01
+}

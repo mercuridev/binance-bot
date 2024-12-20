@@ -56,13 +56,34 @@ def execute_strategy(client, config):
         logging.error(f"Error during strategy execution: {e}")
         raise
 
+def test_api_connection(client):
+    """
+    Test the connection to the Binance API and retrieve account information.
+    """
+    try:
+        account_info = client.get_account()
+        logging.info(f"Connected to Binance Testnet. Account information retrieved successfully.")
+        print("Connection to Binance Testnet successful. Account details:")
+        print("API Key and Secret Key loaded successfully.")
+        print(account_info)
+    except Exception as e:
+        logging.error(f"Failed to connect to Binance API: {e}")
+        raise ValueError("Failed to connect to Binance API. Please check your API key and secret.")
 
 def main():
     """
     Main function to initialize and run the trading bot.
     """
-    # Initialize Binance client
-    client = Client(API_KEY, SECRET_KEY)
+    # Validate API Key and Secret Key
+    if not API_KEY or not SECRET_KEY:
+        logging.error("API Key or Secret Key is missing. Please check your .env file.")
+        raise ValueError("API Key or Secret Key not found.")
+
+    # Initialize Binance client with Testnet
+    client = Client(API_KEY, SECRET_KEY, testnet=True)
+
+    # Test connection to the API
+    test_api_connection(client)
 
     # Load configuration
     config = load_config()
