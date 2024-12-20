@@ -2,4 +2,4 @@ python-binance
 python-dotenv
 pandas
 matplotlib
-ta-lib
+pytest
