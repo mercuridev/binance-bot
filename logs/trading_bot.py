@@ -5,9 +5,7 @@ from dotenv import load_dotenv
 from binance.client import Client
 from strategies.rsi_strategy import execute_rsi_strategy
 from strategies.macd_strategy import execute_macd_strategy
-from strategies.sma_strategy import execute_sma_strategy
 from trading_report import log_trade, generate_report
-from orders.orders_manager import place_order, get_account_balance
 
 # Load environment variables
 load_dotenv()
@@ -35,26 +33,6 @@ def load_config():
         logging.error(f"Failed to load configuration: {e}")
         raise
 
-def execute_strategy(client, config):
-    """
-    Execute the selected trading strategy.
-    """
-    try:
-        if config.get('strategy') == 'RSI':
-            logging.info("Executing RSI Strategy...")
-            execute_rsi_strategy(client, config)
-        elif config.get('strategy') == 'MACD':
-            logging.info("Executing MACD Strategy...")
-            execute_macd_strategy(client, config)
-        elif config.get('strategy') == 'SMA':
-            logging.info("Executing SMA Strategy...")
-            execute_sma_strategy(client, config)
-        else:
-            logging.warning("No valid strategy specified in configuration.")
-    except Exception as e:
-        logging.error(f"Error during strategy execution: {e}")
-        raise
-
 def main():
     """
     Main function to initialize and run the trading bot.
@@ -67,21 +45,26 @@ def main():
 
     logging.info("Starting Binance Trading Bot...")
 
-    # Execute the selected strategy
-    execute_strategy(client, config)
-
-    # Example: Log a trade (replace with actual logic)
+    # Select strategy based on config
     try:
+        if config.get('strategy') == 'RSI':
+            logging.info("Executing RSI Strategy...")
+            execute_rsi_strategy(client, config)
+        elif config.get('strategy') == 'MACD':
+            logging.info("Executing MACD Strategy...")
+            execute_macd_strategy(client, config)
+        else:
+            logging.warning("No valid strategy specified in configuration.")
+
+        # Example of logging a trade (to be replaced with actual trade logic)
         log_trade('BUY', 'BTCUSDT', 0.01, 45000, 10000)
-    except Exception as e:
-        logging.error(f"Failed to log trade: {e}")
 
-    # Generate trading report
-    try:
+        # Generate trading report
         logging.info("Generating trading report...")
         generate_report()
+
     except Exception as e:
-        logging.error(f"Failed to generate report: {e}")
+        logging.error(f"Error occurred: {e}")
 
 if __name__ == "__main__":
     main()
